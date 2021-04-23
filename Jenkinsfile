@@ -44,7 +44,7 @@ pipeline {
                 '''
             }
         }
-        container(name: 'buildah', shell: '/bin/bash') {
+container(name: 'buildah', shell: '/bin/bash') {
             stage('Push image') {
                 sh '''#!/bin/bash
                     set -e
