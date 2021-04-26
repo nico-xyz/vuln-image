@@ -7,13 +7,14 @@ pipeline {
   }
   agent any
     stage("1") {
-      app = docker.build("nicoha/vuln-image")
+      app = docker.build("centos")
     }
     stage("2") {
       steps{
             sh '''
             #!/bin/bash
             rpm -ivh https://github.com/aquasecurity/trivy/releases/download/v0.16.0/trivy_0.16.0_Linux-64bit.rpm"
+            trivy image nicoha/vuln-image
          '''
         script {
           docker.build registry + ":$BUILD_NUMBER"
