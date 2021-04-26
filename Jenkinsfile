@@ -6,11 +6,9 @@ pipeline {
     dockerImage = ""
   }
   agent any
-  stages {
     stage("1") {
       app = docker.build("nicoha/vuln-image")
     }
-  stages {
     stage("2") {
       steps{
             sh '''
@@ -21,6 +19,11 @@ pipeline {
           docker.build registry + ":$BUILD_NUMBER"
         }
       }
+      stage('Push image') {
+        docker.withRegistry('https://registry.hub.docker.com', 'git') {            
+       app.push("${env.BUILD_NUMBER}")            
+       app.push("latest")        
+              }    
+           }
     }
-  }
 }
