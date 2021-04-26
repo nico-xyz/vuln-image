@@ -1,10 +1,13 @@
-pipeline {
 environment {
-BUILD_HOME='/var/lib/jenkins/workspace'
+    registry = "nicoha/vuln-image"
+    registryCredential = 'dockerhub'
 }
-agent any
 stages {
-stage('Checkout: Code') {
-steps {
-	sh "help"
+  stage('Building image') {
+    steps{
+      script {
+        docker.build registry + ":$BUILD_NUMBER"
+      }
+    }
+  }
 }
