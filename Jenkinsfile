@@ -1,7 +1,7 @@
 pipeline {
   environment {
     def app
-    registry = "docker_hub_account/repository_name"
+    registry = "nicoha/vuln-image"
     registryCredential = "dockerhub"
     dockerImage = ""
   }
