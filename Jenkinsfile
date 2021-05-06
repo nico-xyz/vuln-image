@@ -15,8 +15,9 @@ pipeline {
             sh '''
             #!/bin/bash
             rpm -ivh https://github.com/aquasecurity/trivy/releases/download/v0.16.0/trivy_0.16.0_Linux-64bit.rpm"
-            trivy image nicoha/vuln-image
             echo "Installing Trivy scanner..."
+            trivy --exit-code 1 --severity CRITICAL nicoha/vuln-image
+            echo "Scanning image for critical vulnerabilities..."
          '''
         script {
           docker.build registry + ":$BUILD_NUMBER"
