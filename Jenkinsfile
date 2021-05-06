@@ -6,11 +6,11 @@ pipeline {
     dockerImage = ""
   }
   agent any
-    stage("1") {
+    stage("loading") {
       app = docker.build("centos")
       echo "Loading image.."
     }
-    stage("2") {
+    stage("scanning") {
       steps{
             sh '''
             #!/bin/bash
@@ -20,10 +20,20 @@ pipeline {
             
             # Trivy scan
             trivy --exit-code 1 --severity CRITICAL nicoha/vuln-image
+            
+             # Trivy scan result processing
+             my_exit_code=$?
+             echo "RESULT 1:--- $my_exit_code"
+            
+            # Check scan results
+              if [ ${my_exit_code} == 1 ]; then
+                 echo "Image scanning failed. Some vulnerabilities found"
+                 exit 1;
          '''
         script {
           docker.build registry + ":$BUILD_NUMBER"
         }
+        
       }
       stage('Push image') {
         docker.withRegistry('https://registry.hub.docker.com', 'git') {            
